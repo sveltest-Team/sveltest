@@ -1,0 +1,13 @@
+/sveltest/sveltest.egg-info/
+./beta.bat
+.idea
+./build.bat
+测试记录.xlsx
+版本定义.txt
+需求.txt
+/build/
+/dist/
+/test/
+/beta.bat
+/build.bat
+/sveltest.egg-info/

@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+
+from selenium.webdriver.common.by import By
+from {filename}.PageBase import PageBaseElement
+
+
+# POM
+class BaiduUi(PageBaseElement):
+
+    #百度搜索框
+    search_box = (By.ID,'kw')
+
+    #百度搜索按钮
+    search_button = (By.ID,'su')
+
+
+    def search_test(self,val):
+        self.webWait(by=self.search_box).send_keys(val)
+        self.webWait(by=self.search_button).click()
+
+
+# POM + keyword
+
+class BaiduUiKeyword(PageBaseElement):
+
+    #  百度搜索框
+    @property
+    def search_input(self):
+       return self.webWait(by=(By.ID,'kw'))
+
+    # 百度搜索按钮
+    @property
+    def search_button(self):
+        return self.webWait(by=(By.ID, 'su'))
+
+
+    # 行为操作
+    def search_action(self,val):
+        self.search_input.send_keys(val)
+        self.search_button.click()
+
+
+
+

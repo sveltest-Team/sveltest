@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+
+
+from sveltest.components.web.base import PageBase
+from selenium.webdriver.common.by import By
+
+
+class PageBaseElement(PageBase):
+
+
+    def __init__(self,driver,path=None):
+        super(PageBaseElement,self).__init__(driver,path)
+
+
+    """在这里写基础类方法"""
+
+
