@@ -22,7 +22,6 @@ import json
 from functools import wraps
 # 数据驱动
 
-
 from sveltest.components._core import Data
 from sveltest.components.dblib.mysqldb import mysql_db
 from sveltest.components.data.core import xml_json_loader

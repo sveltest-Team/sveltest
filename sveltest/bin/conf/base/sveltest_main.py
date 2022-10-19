@@ -60,7 +60,7 @@ text_logo = """
                                             
             
 sveltest 专注于让自动化更简洁、更简单、高效率！！！
-输入 sveltest -h 命令你可以进行查看 sveltest cli的所有命令哦。
+输入 slt -h 命令你可以进行查看 sveltest cli的所有命令哦。
 
 你也可以进行浏览器输入 sveltest 官方教程文档 ： https://sveltest-team.github.io/docs/
 那么我们开始体验下吧！！！

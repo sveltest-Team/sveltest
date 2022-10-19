@@ -139,17 +139,6 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 
 
-# 可选的邮件配置
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
-EMAIL_SSL_CERTFILE = None
-EMAIL_SSL_KEYFILE = None
-
-EMAIL_TIMEOUT = None
-
-
 # 自动邮箱状态
 AUTO_SEND_EMAIL = True
 
@@ -234,14 +223,25 @@ PROD_PORT = [80]
 
 # 环境控制器配置
 ENVIRONMENT_CLASSES_CONFIG = {
-    "CLASSES":[
-        ""
-    ],
+    "CLASSES":"CLASS_DEV",
+
     "DEFAULT_ENVIRONMENT_NAME":DEV,
     "ENVIRONMENT_HOST":DEV_HOST,
     "ENVIRONMENT_PORT":DEV_PORT,
+    "FRONTEND": {
+        "CLASS_DEV":"",
+        "CLASS_SIT":"",
+        "CLASS_UAT":"",
+        "CLASS_PROD":""
+    },
+    "BACKEND": {
+        "CLASS_DEV": "",
+        "CLASS_SIT": "",
+        "CLASS_UAT": "",
+        "CLASS_PROD": ""
+    },
 }
-
+# 后台
 
 # 测试用例运行匹配规则
 TEST_CASE_ENFORCE_RULES = "test_*.py"

@@ -22,7 +22,7 @@ def show_toast(title,msg):
     toaster.show_toast(title=title,
                        msg=msg,
                        icon_path=None,
-                       duration=10,
+                       duration=1,
                        threaded=True
                        )
 

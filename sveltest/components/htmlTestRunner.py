@@ -1150,6 +1150,8 @@ class HTMLTestRunner(Template_mixin):
         # 用例执行异常数
         error = str(result.error_count)
 
+        skip = str(result.skip_count)
+
         runTimestop = self.stopTime - self.startTime
 
         try:
@@ -1157,6 +1159,16 @@ class HTMLTestRunner(Template_mixin):
             # 执行通过率
             passrate = str("%.2f%%" % (float(result.success_count) /
                                        float(result.success_count + result.failure_count + result.error_count) * 100))
+            # 失败率
+            failrate = str("%.2f%%" % (float(result.failure_count) /
+                                       float(result.success_count + result.failure_count + result.error_count) * 100))
+
+            # 错误率
+            errorrate = str("%.2f%%" % (float(result.error_count) /
+                                       float(result.success_count + result.failure_count + result.error_count) * 100))
+            # 跳过率
+            skiprate = str("%.2f%%" % (float(result.skip_count) /
+                                       float(result.success_count + result.failure_count + result.error_count + result.skip_count) * 100))
         except:
             passrate = 0
 
@@ -1168,8 +1180,10 @@ class HTMLTestRunner(Template_mixin):
         log_v2.info("正在统计测试结果并生成测试报告...")
         log_v2.success("测试统计报告已完成，输出的测试报告位置在：" + self.stream.name)
 
-        return result, [count, Pass, fail, error, passrate, str(self.startTime)[:19], self.stopTime, runTimestop,
+        return result, [count, Pass, fail, error,skip, passrate, failrate,errorrate,skiprate,
+                        str(self.startTime)[:19], self.startTime,self.stopTime, runTimestop,
                         self.totalresult]
+
 
     def sortResult(self, result_list):
         # 进行结果排序

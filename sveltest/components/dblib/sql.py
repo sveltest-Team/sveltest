@@ -327,7 +327,7 @@ class QuerySet(dict):
             raise Exception("不存在")
 
 
-from fastTest.bin.conf import settings
+from sveltest.bin.conf import settings
 
 db_info = getattr(settings,"DATABASE")
 

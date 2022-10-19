@@ -18,7 +18,8 @@
 
 
 import unittest
-from typing import NoReturn
+from typing import NoReturn, Optional, overload
+
 
 class TestCase(unittest.TestCase):
 
@@ -48,3 +49,7 @@ class TestCase(unittest.TestCase):
 
 
 
+class TestBaseView(TestCase):
+
+    def initizlize_request(self):
+        return None

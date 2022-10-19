@@ -181,6 +181,8 @@ class SvelteTestResult(SvelteResult):
         super(SvelteTestResult, self).addFailure(test, err)
 
 
+
+
         if self.verbosity > 1:
 
 
@@ -207,10 +209,10 @@ class SvelteTestResult(SvelteResult):
         add_skip = str(self.module).replace('\\', '/').split('/')[-1].rstrip("'>")
         super(SvelteTestResult, self).addSkip(test, reason)
         if self.verbosity > 1:
-            console.print("%s    %s   SKIP" % (test, reason), style="yellow")
+            console.print("%s    %s   SKIP" % (add_skip, reason), style="yellow")
 
         elif self.verbosity:
-            console.print("%s    %s   S" % (test, reason), style="yellow")
+            console.print("%s   S" % ( reason), style="yellow")
 
     def printErrors(self, e:Optional[int]):
         """
@@ -393,6 +395,8 @@ class SvelteTextTestRunner(object):
                     if x:
                         case_set.update({i:x})
 
+
+
             db = {}
             for d,t in case_set.items():
                 dy = [xf.strip(".py") if xf.endswith(".py") else xf for xf in [x for x in t.split(" ") if x]]
@@ -400,9 +404,12 @@ class SvelteTextTestRunner(object):
                 db.update({d: {"name":dys}})
 
             for i,out in case_out.items():
-                db[i].update({"out":out})
+                try:
+                    db[i].update({"out":out})
+                except:
+                    continue
 
-            if case_out:
+            if case_out and self.verbosity > 2:
                 overflow_methods: List[OverflowMethod] = ["调试输出"]
                 console.rule(title=overflow_methods[0], characters="~", style='bold blue')
 

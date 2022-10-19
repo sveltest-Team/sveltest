@@ -14,10 +14,6 @@ from typing import Optional,Union,Dict,List,NoReturn
 
 from sveltest.support.logger_v2 import log_v2
 
-
-
-
-
 class SveltestEmail:
     # user 代表用户名
     # password 代表邮箱密码

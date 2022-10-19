@@ -69,7 +69,7 @@ class Email(SveltestEmail):
 
 from jinja2 import PackageLoader, Environment,FileSystemLoader
 
-from pathlib import Path
+
 class JinJaTemplate:
 
     def __init__(self):
