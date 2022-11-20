@@ -1,8 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import win32api
 
+import time
+import os
+import subprocess
+import sys
+import requests
+import zipfile
+import win32api
+from selenium.webdriver.chrome.options import Options
 from sveltest.support.logger_v2 import log_v2
+from typing import Optional, NoReturn, Generator, List
+from datetime import datetime
+
+ie = ["IE", 'Ie', 'ie']
+
+
 #  xml
 # https://registry.npmmirror.com/-/binary/chromedriver json
 # https://registry.npmmirror.com/-/binary/geckodriver geckodriver 火狐  json
@@ -11,18 +24,6 @@ from sveltest.support.logger_v2 import log_v2
 #  geckodriver edge  json
 
 #  IE xml
-import subprocess
-import sys
-from datetime import datetime
-
-import requests
-import zipfile
-
-from selenium.webdriver.chrome.options import Options
-import time
-import os
-
-ie = ["IE", 'Ie', 'ie']
 
 
 OPEN_DERVER_URL = {
@@ -40,7 +41,7 @@ OPEN_DERVER_URL = {
 class DownloadDriver:
 
     # 进行解压
-    def _unzip(self, to_path, zip_file):
+    def _unzip(self, to_path:Optional[str], zip_file:Optional[str]) -> NoReturn:
         """
         解压Chromedriver压缩包到指定目录
         :param to_path:
@@ -52,7 +53,7 @@ class DownloadDriver:
             f.extract(files, to_path)
 
     # 配置不显示浏览器
-    def head(self):
+    def head(self) -> Optional[object]:
         chrome_options = Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
@@ -60,16 +61,16 @@ class DownloadDriver:
             'User-Agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36')
         return chrome_options
 
-    def timestamp(self, shijian):
+    def timestamp(self, timedate:Optional[str]) -> int:
         """
         :param shijian:
         :return:
         """
-        s_t = time.strptime(shijian, "%Y-%m-%d %H:%M:%S")
+        s_t = time.strptime(timedate, "%Y-%m-%d %H:%M:%S")
         mkt = int(time.mktime(s_t))
         return (mkt)
 
-    def get_driver_data(self, driver="chrome"):
+    def get_driver_data(self, driver:Optional[str]="chrome") -> Optional[Generator]:
         """
 
         :param driver:
@@ -150,7 +151,7 @@ class DownloadDriver:
                         pass
 
     # 获取python安装路径
-    def _get_python_path(self):
+    def _get_python_path(self) -> str:
         """
         获取python安装路径
         :return:
@@ -162,12 +163,12 @@ class DownloadDriver:
             output = 0
         return output
 
-    def _get_latest_version(self, driver="chrome"):
+    def _get_latest_version(self, driver:Optional[str]="chrome") -> Optional[List]:
         """获取最新版本"""
 
         log_v2.info("正在搜索最新版本驱动" + driver)
         x = [x for x in self.get_driver_data(driver=driver)]
-        # print()
+
         x.sort(key=lambda s: s["timestamp"], reverse=True)
 
 
@@ -177,7 +178,7 @@ class DownloadDriver:
         if driver in ie:
             return x[:4]
 
-    def _get_latest_from_version(self, v, driver="chrome"):
+    def _get_latest_from_version(self, v:Optional[str], driver:Optional[str]="chrome") -> Optional[List]:
 
         """根据指定的驱动版本从中进行获取最新版本驱动"""
 
@@ -195,7 +196,7 @@ class DownloadDriver:
             if s["version"].startswith(v):
                 yield s
 
-    def platform(self, p="win32", driver='chrome', version=None):
+    def platform(self, p:Optional[str]="win32", driver:Optional[str]='chrome', version:Optional[str]=None) -> List:
         """
         version :
         :paramp: chrome:linux64 mac64 mac64_m1 win32
@@ -304,7 +305,7 @@ class DownloadDriver:
                 win32api.HIWORD(ms), win32api.LOWORD(ms), win32api.HIWORD(ls), win32api.LOWORD(ls)
             )
 
-            print("66999===>", version)
+
 
         except Exception as e:
             print(e)
@@ -568,7 +569,7 @@ class JsonDownloadDriver(DownloadDriver):
                 win32api.HIWORD(ms), win32api.LOWORD(ms), win32api.HIWORD(ls), win32api.LOWORD(ls)
             )
 
-            print("66999===>", version)
+
 
         except Exception as e:
             print(e)
@@ -630,24 +631,3 @@ class JsonDownloadDriver(DownloadDriver):
                 p=p,
                 version=self._get_chrome_current_version().split(".")[0],
             ))
-
-
-if __name__ == '__main__':
-
-
-    d = JsonDownloadDriver()
-    # d.open_ie("x64")
-    print(d.get_edge_current_version())
-
-
-    data = {
-        "delimiter":"%2F",
-    # "marker": "3!100!MDAwMDMxITkwLjAuNzc4LjAvZWRnZWRyaXZlcl9hcm02NC56aXAhMDAwMDI4ITk5OTktMTItMzFUMjM6NTk6NTkuOTk5OTk5OVoh",
-    'maxresults': 100,
-    'restype': 'container',
-    'comp': 'list',
-    }
-    x = requests.get(url="https://msedgewebdriverstorage.blob.core.windows.net/edgewebdriver",params=data)
-
-    print(x.text)
-    print(x.request.url)

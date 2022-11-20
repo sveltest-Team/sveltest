@@ -4,13 +4,15 @@
 # authors:guanfl
 # 2021/6/9
 import json
+import os
+from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI
 
 
 
-app = FastAPI(title="sweet 接口demo服务 ",
+app = FastAPI(title="sveltest 接口demo服务 ",
               description="""""",
               version="1.1")
 
@@ -22,7 +24,9 @@ def index():
     return {'code':0,'message': '欢迎使用 sveltest 框架 ,接口测试demo服务！'}
 
 def get_cityids():
-    data = json.load(open("cityids.json","r",encoding="utf-8"))
+    BASE_DIR  = Path(__file__).resolve().parent.parent
+    file_ = os.path.join(BASE_DIR, "api_demo/cityids.json").replace("\\", "/")
+    data = json.load(open(file_,"r",encoding="utf-8"))
     data_json = {}
     for x in data:
         areaid = x["areaid"]
@@ -67,6 +71,7 @@ def requests_weather(city_id):
 )
 def index(cityname:str):
     """查询"""
+
     if cityname:
         try:
             city_id = get_cityids()[cityname]
@@ -79,3 +84,5 @@ def index(cityname:str):
 
 if __name__ == '__main__':
     uvicorn.run(app=app, host="127.0.0.1", port=6688)
+
+

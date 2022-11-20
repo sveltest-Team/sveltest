@@ -18,7 +18,7 @@ import unittest
 from fnmatch import fnmatchcase
 from sveltest.bin.conf import settings
 from sveltest.case import TestCase
-from typing import Optional, Any, Tuple, Dict
+from typing import (Optional, Any, Tuple, Dict)
 
 
 class Loader(unittest.TestLoader):

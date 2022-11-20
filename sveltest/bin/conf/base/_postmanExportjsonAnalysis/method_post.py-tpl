@@ -1,0 +1,6 @@
+self.post(
+            router='{{path}}',
+            headers={{headers}},
+            env_control=False,
+            data={{data}}
+        )

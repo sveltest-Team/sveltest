@@ -14,31 +14,27 @@
 
 """
 
+import unittest
+import warnings
 import sys
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
-
-from typing import Optional, List, Union, Dict, Any, NoReturn, Tuple
+from typing import (Optional, List, Union, Dict, Any, NoReturn, Tuple)
 from sveltest.bin.conf import settings
-
-import unittest
-import warnings
 from functools import wraps
 from unittest import TestResult
-
 from sveltest.support.logger_v2 import log_v2
 from .components.toast import test_toast
-
 from .loader import svelteTestLoader
 from rich.console import Console, OverflowMethod
-
-console = Console()
 from io import StringIO
-
 from unittest.signals import registerResult
+
+
 
 get_case = getattr(settings, "CASE_SUITE_PATH")
 
+console = Console()
 
 def failfast(method):
     @wraps(method)
@@ -75,6 +71,7 @@ class CommonConfig:
     """"""
     pass
 
+TEST_CASE_SET_OUT = []
 
 class SvelteResult(TestResult):
     """
@@ -125,6 +122,29 @@ class SvelteTestResult(SvelteResult):
 
 
 
+    def startTest(self, test):
+        test.imgs = []
+        TestResult.startTest(self, test)
+        # TestResult.startTest(self, test)
+        # 只有一个用于stdout和stderr的缓冲区
+        self.outputBuffer.seek(0)
+        self.outputBuffer.truncate()
+        stdout_redirector.fp = self.outputBuffer
+        stderr_redirector.fp = self.outputBuffer
+        self.stdout0 = sys.stdout
+        self.stderr0 = sys.stderr
+        sys.stdout = stdout_redirector
+        sys.stderr = stderr_redirector
+
+    def complete_output(self):
+        """
+        """
+        if self.stdout0:
+            sys.stdout = self.stdout0
+            sys.stderr = self.stderr0
+            self.stdout0 = None
+            self.stderr0 = None
+        return self.outputBuffer.getvalue()
 
 
     def addSuccess(self, test:Optional[Any],
@@ -140,14 +160,23 @@ class SvelteTestResult(SvelteResult):
         """
 
         add_success = str(self.module).replace('\\', '/').split('/')[-1].rstrip("'>")
-
         super(SvelteTestResult, self).addSuccess(test)
 
+        output = self.complete_output()
+
         if self.verbosity > 1:
-            console.print("%s    %s   PASS" % (add_success, test), style="green")
+            context_ = "%s    %s   PASS" % (add_success, test)
+            console.print(context_, style="green")
+            case_name_tag = ".".join([r for r in context_.split(" ") if r != ""][:2])
+            TEST_CASE_SET_OUT.append({case_name_tag:output})
+
         elif self.verbosity:
             # 成功
-            console.print("%s   OK" % (test), style="green")
+            context_ = "%s   OK" % (test)
+            console.print(context_, style="green")
+            case_name_tag = None
+
+
 
     def addError(self, test:Optional[Any], err:Optional[str]):
         """
@@ -160,11 +189,16 @@ class SvelteTestResult(SvelteResult):
         add_success = str(self.module).replace('\\', '/').split('/')[-1].rstrip("'>")
         super(SvelteTestResult, self).addError(test, err)
 
+        output = self.complete_output()
+
         if self.verbosity > 1:
-            console.print("%s    %s   ERROR" % (add_success, test), style="green")
+            context_ = "%s    %s   ERROR" % (add_success, test)
+            console.print(context_, style="red")
+            case_name_tag = ".".join([r for r in context_.split(" ") if r != ""][:2])
+            TEST_CASE_SET_OUT.append({case_name_tag: output})
         elif self.verbosity:
-            # 成功
-            console.print("%s   E" % (test), style="green")
+
+            console.print("%s   E" % (test), style="red")
 
     def addFailure(self, test:Optional[Any],err:Optional[str]):
         """
@@ -179,20 +213,18 @@ class SvelteTestResult(SvelteResult):
         # 加载断言失败的用例
         add_failure = str(self.module).replace('\\', '/').split('/')[-1].rstrip("'>")
         super(SvelteTestResult, self).addFailure(test, err)
-
-
+        output = self.complete_output()
 
 
         if self.verbosity > 1:
+            context_ = "%s    %s   FAIL" % (add_failure, test)
 
-
-            console.print("%s    %s   FAIL" % (add_failure, test), style="red")
-
+            console.print(context_, style="red")
+            case_name_tag = ".".join([r for r in context_.split(" ") if r != ""][:2])
+            TEST_CASE_SET_OUT.append({case_name_tag: output})
 
         elif self.verbosity:
             console.print("%s   F" % (test), style="red")
-
-
 
 
 
@@ -208,8 +240,11 @@ class SvelteTestResult(SvelteResult):
         # console.rule(title=overflow_methods[0], characters="-", style='yellow')
         add_skip = str(self.module).replace('\\', '/').split('/')[-1].rstrip("'>")
         super(SvelteTestResult, self).addSkip(test, reason)
+        context_ = "%s    %s   SKIP" % (add_skip, test)
         if self.verbosity > 1:
             console.print("%s    %s   SKIP" % (add_skip, reason), style="yellow")
+            case_name_tag = ".".join([r for r in context_.split(" ") if r != ""][:2])
+            TEST_CASE_SET_OUT.append({case_name_tag: output})
 
         elif self.verbosity:
             console.print("%s   S" % ( reason), style="yellow")
@@ -313,13 +348,17 @@ class SvelteTextTestRunner(object):
         self.tb_locals = tb_locals
         self.warnings = warnings
         self.module = module
+        self.stdout0 = sys.stdout
+        self.stderr0 = sys.stderr
+        self.outputBuffer = StringIO()
 
-    def run(self, test, max_workers: Optional[int] = 0):
+    def run(self, test, max_workers: Optional[int] = 0,toast:Optional[bool]=True):
         """
 
         :param test:
         :return:
         """
+
 
         result = SvelteTestResult(stream=self.stream, descriptions=self.descriptions, verbosity=self.verbosity,
                                   module=self.module, )
@@ -365,12 +404,13 @@ class SvelteTextTestRunner(object):
                     else:
                         from io import StringIO
                         import string, sys
-                        stdout = sys.stdout
+                        # stdout = sys.stdout
 
-                        sys.stdout = file = StringIO()
-
+                        # sys.stdout = file = StringIO()
                         test(result)
-                        sys.stdout = stdout
+                        # sys.stdout = stdout
+
+
 
                 finally:
                     stopTestRun = getattr(result, 'stopTestRun', None)
@@ -379,43 +419,17 @@ class SvelteTextTestRunner(object):
 
                 stopTime = time.perf_counter()
 
-            out = file.getvalue()
 
-            for x in out.split("\n"):
-                if x.startswith("test_"):
-                    console.print(x)
-
-            case_set = {}
-            case_out = {}
-            for i,x in enumerate(out.split("\n")):
-                if not x.startswith("test_"):
-                   if x:
-                        case_out.update({i+1:x})
-                else:
-                    if x:
-                        case_set.update({i:x})
-
-
-
-            db = {}
-            for d,t in case_set.items():
-                dy = [xf.strip(".py") if xf.endswith(".py") else xf for xf in [x for x in t.split(" ") if x]]
-                dys = f'{dy[0]}.{dy[1]}'
-                db.update({d: {"name":dys}})
-
-            for i,out in case_out.items():
-                try:
-                    db[i].update({"out":out})
-                except:
-                    continue
-
-            if case_out and self.verbosity > 2:
+            if self.verbosity > 2:
                 overflow_methods: List[OverflowMethod] = ["调试输出"]
                 console.rule(title=overflow_methods[0], characters="~", style='bold blue')
 
-                for p,t in db.items():
-                    if t.get("out"):
-                        console.print(f"{t['name']} 【output】： {t['out']}")
+                # log_v2.info(TEST_CASE_SET_OUT)
+
+                for p in TEST_CASE_SET_OUT:
+                    for e in p.items():
+                        console.print(e[0]+"【output】：\n",e[-1]+"\n")
+
 
 
 
@@ -446,7 +460,7 @@ class SvelteTextTestRunner(object):
                 ['COUNT', str(get_run_test["count"])],
 
             ]
-            if settings.WINDOWS_TOAST_STATUS:
+            if toast:
                 test_toast(pass_count=count_test_success,fail_count=str(get_run_test["failures"]),
                            skip_count=str(get_run_test["skipped"]),error_count=str(get_run_test["errors"],),
                            count=str(get_run_test["count"])
@@ -489,6 +503,7 @@ class SvelteTextTestRunner(object):
 
             return result
 
+
         else:
             log_v2.warning("没有找到可执行的测试用例")
 
@@ -504,7 +519,8 @@ class SvelteMain(object):
                  title: Optional[str] = "sveltest Test Report", tester: Optional[str] = "Anonymous",
                  description: Optional[str] = "Test case execution",
                  save_last_try: Optional[bool] = False,
-                 thread_count: int = 0
+                 thread_count: int = 0,
+                 toast:Optional[bool]=True
                  ):
         """"""
 
@@ -541,9 +557,9 @@ class SvelteMain(object):
             else:
                 case = svelteTestLoader.loadTestsFromModule(self.module)
 
-            self.run(case)
+            self.run(case,toast)
 
-    def run(self, suits: Optional[Any]) -> NoReturn:
+    def run(self, suits: Optional[Any],toast:Optional[bool]=True) -> NoReturn:
         """
         run test case
         """
@@ -558,7 +574,7 @@ class SvelteMain(object):
                 # tb_locals=self.tb_locals
             )
             testrunner.run(
-                test=suits, max_workers=self.thread_count
+                test=suits, max_workers=self.thread_count,toast=toast
             )
 
         if self.debug is False or getattr(settings, "DEBUG") is False:
@@ -572,5 +588,6 @@ class SvelteMain(object):
 
 
 main = SvelteMain
+
 
 

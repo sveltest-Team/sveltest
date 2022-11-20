@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-# authors:guanfl
-# 2022/8/23
-
-
 
 import os
-
 from sveltest.support import Log4J
 
 
@@ -114,10 +109,16 @@ class DiffLibPush:
 class ObjectDict(dict):
 
     def __getattr__(self, key):
-        if key not in self:
+        try:
+            if key not in self:
+                return None
+            else:
+                value = self[key]
+
+                if isinstance(value,dict):
+
+                    value = ObjectDict(value)
+
+                return value
+        except:
             return None
-        else:
-            value = self[key]
-            if isinstance(value,dict):
-                value = ObjectDict(value)
-            return value

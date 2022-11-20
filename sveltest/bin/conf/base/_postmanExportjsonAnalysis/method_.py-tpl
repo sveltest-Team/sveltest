@@ -1,0 +1,6 @@
+
+
+    def test_sveltest_{{methods_name}}(self):
+        """{{def_doc}}"""
+
+        {{case_code}}

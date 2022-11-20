@@ -2,8 +2,6 @@
 #-*- coding:utf-8 -*-
 
 from sveltest.support.logger_v2 import log_v2
-
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 

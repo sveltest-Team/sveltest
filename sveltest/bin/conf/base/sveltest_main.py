@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 # 2021/10/28
 
@@ -19,8 +19,6 @@ sveltest
 
 """
 
-
-
 import argparse
 import os
 import sys
@@ -29,10 +27,6 @@ from sveltest.support import StFile
 from sveltest.support import ReNumber
 from sveltest.bin.conf.base import BASE_DIRs
 
-
-
-
-
 st_os = StFile()
 
 """
@@ -40,12 +34,13 @@ v1.0.2
 guanfl
 20220926
 """
+from sveltest.version import version, updateTime
 
 v = ''
 if sys.platform == "win32" or sys.platform != "Linux":
-    v = "sveltest@Windows 1.2  win32_x86\nUpdateTime:20221020\n version 1.2.0"
+    v = f"sveltest@Windows {version}  win32_x86\nUpdateTime:{updateTime}\n version {version}"
 else:
-    v = "sveltest@Linux 1.2  Linux32 \nUpdateTime:20221020\n version 1.2.0"
+    v = f"sveltest@Linux {version}  Linux32 \nUpdateTime:{updateTime}\n version {version}"
 
 # try:
 text_logo = """
@@ -57,8 +52,7 @@ text_logo = """
      |___/  \_/  \___||_| \__|\___||___/ \__|
 
 
-                                            
-            
+
 sveltest 专注于让自动化更简洁、更简单、高效率！！！
 输入 slt -h 命令你可以进行查看 sveltest cli的所有命令哦。
 
@@ -66,33 +60,44 @@ sveltest 专注于让自动化更简洁、更简单、高效率！！！
 那么我们开始体验下吧！！！
 """
 
+
+
+
 parser = argparse.ArgumentParser(
-    usage="sveltest V1 cli",
-    description='='*18+'sveltest-CLI'+'='*18,
-                                 epilog='='*20+'sveltest'+'='*20)
-parser.add_argument('create', help="创建工程 ", type=str,nargs='?')
+    prog='sveltest',
+    # usage="sveltest V1 cli",
+    description='=' * 18 + 'sveltest-CLI' + '=' * 18,
+    epilog='=' * 20 + 'sveltest' + '=' * 20)
+# parser.add_argument('create', help="创建工程 ", type=str, nargs='?')
+# create_sub = parser.add_subparsers(title='subcommands',
+#                                   description='子目录',
+#                                    help='additional help')
+# parser_create = create_sub.add_parser('-ui', help='create help')
+# parser_create.add_argument('-bar', type=int, help='bar help')
+# parser_create.add_argument('-ui', help='创建ui自动化工程项目模板 ', dest="ui")
+
+parser.add_argument('create', help="创建工程 ", type=str, nargs='?')
 # parser.add_argument('script', help="生成脚本 ",type=str,nargs='?') #可选的位置参数
-parser.add_argument('run', help="运行脚本 ",type=str,nargs='?') #可选的位置参数
-parser.add_argument('runserver', help="运行服务 ",type=str,nargs='?') #可选的位置参数
-parser.add_argument('doc', help="浏览器打开sveltest 官方文档 ",type=str,nargs='?') #可选的位置参数
+parser.add_argument('run', help="运行脚本 ", type=str, nargs='?')  # 可选的位置参数
+parser.add_argument('runserver', help="运行服务 ", type=str, nargs='?')  # 可选的位置参数
+parser.add_argument('doc', help="浏览器打开sveltest 官方文档 ", type=str, nargs='?')  # 可选的位置参数
 # ----------------------------------------------------------------
 
-parser.add_argument('-ui', help='创建ui自动化工程项目模板 ',dest="ui")
-# parser.add_argument('-api', help='创建api自动化工程项目模板 ',type=str)
+parser.add_argument('-ui', help='创建ui自动化工程项目模板 ', dest="ui")
+parser.add_argument('-api', help='创建api自动化工程项目模板 ',type=str)
 # parser.add_argument('-T','--type', help='生成的脚本类型-暂指定仅为Python脚本 ')
 # parser.add_argument('-file', help='源文件',type=str)
-parser.add_argument('-p','--port', help='指定端口号')
+parser.add_argument('-p', '--port', help='指定端口号')
 # parser.add_argument('-template', help='创建一个关键字模板',required=False)
 # parser.add_argument('-path', help='脚本存放目录路径')
 parser.add_argument('-run', help='运行服务')
-parser.add_argument('-v', "--version",action='version', version=v,help='查看版本')
+parser.add_argument('-v', "--version", action='version', version=v, help='查看版本')
 
 # ------------------------------------------------------------------
 args = parser.parse_args()
 
 
 def main():
-
     try:
 
         if args.create == "create":
@@ -102,126 +107,118 @@ def main():
             BASE_DIR = os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
 
             if args.ui:
-                path_join = os.path.join(current_path, args.ui).replace("\\","/")
-                print("==>",path_join)
+                path_join = os.path.join(current_path, args.ui).replace("\\", "/")
 
                 t = ReNumber()
-                if  t.number(args.ui) is False :
-                    copy_fileName = os.path.join(BASE_DIRs, "project_template").replace("\\","/")
-
-                    # print(BASE_DIR,sys.argv[-1])
+                if t.number(args.ui) is False:
+                    copy_fileName = os.path.join(BASE_DIRs, "project_template").replace("\\", "/")
 
                     if os.path.isdir(path_join):
-                        print(args.ui,"该目录已存在")
-                        # tank_os.copy_all(copy_fileName, path_join)
-                        # for wi in os.walk(path_join):
-                        #     print(os.path.isdir(path_join))
+                        print(args.ui, "该目录已存在")
+
                         return copy_fileName
                     else:
                         os.mkdir(args.ui)
                         # 进行复制模板到用户的指定目录下
                         st_os.copy_all(copy_fileName, path_join)
 
-                        for rootdir,sub,current_file in os.walk(path_join):
+                        for rootdir, sub, current_file in os.walk(path_join):
 
                             # 为了兼容linux系统需要对其进行格式转换
-                            cr = rootdir.replace("\\","/").split("/")
+                            cr = rootdir.replace("\\", "/").split("/")
 
                             # 进行遍历每一个目录下的文件
-                            for file in current_file:
-                                # 并进行拼接他们的文件路径
+                            if cr[-1] != "__pycache__":
+                                for file in current_file:
+                                    # 并进行拼接他们的文件路径
+                                    file_name_list = ["manage.py-tpl", "__init__.py-tpl", "BaiduElement.py-tpl"]
 
-                                file_name_list = ["manage.py-tpl","__init__.py-tpl","BaiduElement.py-tpl"]
+                                    if file in file_name_list:
+                                        _join_path = os.path.join(rootdir, file).replace("\\", '/')
 
-                                if file in file_name_list:
+                                        with open(_join_path, "r", encoding="utf-8") as f:
+                                            text = f.read()
+                                            #
+                                        apps = text.format(filename=args.ui)
+                                        with open(_join_path, 'w', encoding="utf-8") as d:
+                                            d.write(str(apps))
+                                            d.close()
+                                    # #
+                                    _join_path = os.path.join(rootdir, file)
+                                    _sd = _join_path.split("-")
+                                    os.rename(_join_path, _sd[0])
 
-                                    _join_path = os.path.join(rootdir, file).replace("\\",'/')
-
-                                    with open(_join_path,"r",encoding="utf-8") as f:
-                                        text = f.read()
-                                        #
-                                    apps = text.format(filename=args.ui)
-                                    with open(_join_path,'w',encoding="utf-8") as d:
-                                        d.write(str(apps))
-                                        d.close()
-                                # #
-                                _join_path = os.path.join(rootdir, file)
-                                _sd = _join_path.split("-")
-                                os.rename(_join_path,_sd[0])
-
-                            if cr[-1] == "project_name":
-                                _prod = rootdir.split("\\")[:-1]
-                                join_path_string = "\\".join(_prod)
-                                dir_path = os.path.join(str(join_path_string),sys.argv[-1])
-                                os.rename(rootdir,dir_path)
+                                if cr[-1] == "project_name":
+                                    _prod = rootdir.split("\\")[:-1]
+                                    join_path_string = "\\".join(_prod)
+                                    dir_path = os.path.join(str(join_path_string), sys.argv[-1])
+                                    os.rename(rootdir, dir_path)
                 else:
                     print("ui参数值不能为数字")
 
-            # if args.api:
-            #     t = ReNumber()
-            #     path_join = r"%s\%s" % (current_path, args.api)
-            #     if t.number(args.api) is False:
-            #         copy_fileName = os.path.join(BASE_DIR, r"config\api_project_template")
-            #         # print(BASE_DIR,sys.argv[-1])
-            #
-            #         if os.path.isdir(path_join):
-            #             print(args.api, "该目录已存在")
-            #             # tank_os.copy_all(copy_fileName, path_join)
-            #             # for wi in os.walk(path_join):
-            #             #     print(os.path.isdir(path_join))
-            #             return copy_fileName
-            #         else:
-            #             # print("ui",copy_fileName)
-            #             os.mkdir(args.api)
-            #             # 进行复制模板到用户的指定目录下
-            #             st_os.copy_all(copy_fileName, path_join)
-            #
-            #             for rootdir, sub, current_file in os.walk(path_join):
-            #
-            #                 # 为了兼容linux系统需要对其进行格式转换
-            #                 cr = rootdir.replace("\\", "/").split("/")
-            #
-            #                 # 进行遍历每一个目录下的文件
-            #                 for file in current_file:
-            #                     # 并进行拼接他们的文件路径
-            #
-            #                     file_name_list = ["manage.py-tpl", "__init__.py-tpl", "tk_test_api.py-tpl"]
-            #
-            #                     if file in file_name_list:
-            #                         _join_path = os.path.join(rootdir, file)
-            #                         # print(rootdir+"\\%s"%file)
-            #                         with open(rootdir + "\\%s" % file, "r", encoding="utf-8") as f:
-            #                             text = f.read()
-            #                             #
-            #                         apps = text.format(filename=args.api)
-            #                         with open(rootdir + "\\%s" % file, 'w', encoding="utf-8") as d:
-            #                             d.write(str(apps))
-            #                             d.close()
-            #                     # #
-            #                     _join_path = os.path.join(rootdir, file)
-            #                     _sd = _join_path.split("-")
-            #                     os.rename(_join_path, _sd[0])
-            #
-            #                 if cr[-1] == "project_name":
-            #                     _prod = rootdir.split("\\")[:-1]
-            #                     join_path_string = "\\".join(_prod)
-            #                     dir_path = os.path.join(str(join_path_string), args.api)
-            #                     os.rename(rootdir, dir_path)
-            #     else:
-            #         print("ui参数值不能为数字")
+            if args.api:
+                path_join = os.path.join(current_path, args.api).replace("\\", "/")
+                t = ReNumber()
+                if t.number(args.api) is False:
+
+                    copy_fileName = os.path.join(BASE_DIRs, "project_api_template").replace("\\", "/")
+                #
+                    if os.path.isdir(path_join):
+                        print(args.api, "该目录已存在")
+
+                    else:
+                        os.mkdir(args.api)
+                        # 进行复制模板到用户的指定目录下
+                        st_os.copy_all(copy_fileName, path_join)
+
+                        for rootdir, sub, current_file in os.walk(path_join):
+
+                            # 为了兼容linux系统需要对其进行格式转换
+                            cr = rootdir.replace("\\", "/").split("/")
+
+                            # 进行遍历每一个目录下的文件
+                            if cr[-1] != "__pycache__":
+                                for file in current_file:
+                                    # 并进行拼接他们的文件路径
+                                    file_name_list = ["manage.py-tpl", "__init__.py-tpl", "BaiduElement.py-tpl"]
+
+
+                                    if file in file_name_list:
+                                        _join_path = os.path.join(rootdir, file).replace("\\", '/')
+
+
+                                        with open(_join_path, "r", encoding="utf-8") as f:
+                                            text = f.read()
+
+                                        apps = text.format(filename=args.api)
+                                        with open(_join_path, 'w', encoding="utf-8") as d:
+                                            d.write(str(apps))
+                                            d.close()
+
+                                    _join_path = os.path.join(rootdir, file)
+                                    _sd = _join_path.split("-")
+                                    os.rename(_join_path, _sd[0])
+
+
+                                if cr[-1] == "project_name":
+                                    _prod = rootdir.split("\\")[:-1]
+                                    join_path_string = "\\".join(_prod)
+                                    dir_path = os.path.join(str(join_path_string), sys.argv[-1])
+                                    os.rename(rootdir, dir_path)
+
+
+                else:
+                    print("api参数值不能为数字")
 
         # 启动接口服务 仅本地地址
         elif args.create == "runserver":
             # guanfl
             # 20210610
+            d = os.path.join(BASE_DIRs, 'api_demo').replace("\\", '/')
 
-            # d = str(BASE_DIRs).replace("\\","/").split("/")
-            d = os.path.join(BASE_DIRs,'api_demo').replace("\\",'/')
-            # dp = '\\'.join(d[1:]).replace("\\",'/')
             if args.port:
                 os.system(f"{d} uvicorn api:app  --port {args.port} --reload")
             else:
-                # sd = '\\'.join(d).replace("\\",'/')
                 os.system(fr"python {d}\api.py")
 
         # v 1.2.1
@@ -364,16 +361,16 @@ def main():
 
         elif args.create == "run":
             # 运行测试脚本
-            current_path = os.path.abspath("").replace('\\','/')
+            current_path = os.path.abspath("").replace('\\', '/')
             os.system("python manage.py")
 
 
 
         else:
             print("没有这个命令：" + sys.argv[1])
-    except:
-        print(text_logo)
-
+    except Exception as e:
+        print(e)
+        # print(text_logo)
 
 
 

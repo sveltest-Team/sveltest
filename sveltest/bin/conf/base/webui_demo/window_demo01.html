@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sweet-窗口移动demo</title>
+</head>
+<body>
+<input type="button" value="sweet-窗口移动demo" onclick="moveWin()" />
+</body>
+</html>
+<script type="text/javascript">
+function moveWin()
+  {
+  myWindow.moveTo(0,0)
+  myWindow.focus()
+  }
+</script>
+<script type="text/javascript">
+myWindow=window.open('','','width=200,height=100')
+myWindow.document.write("sweet-窗口移动demo")
+</script>
+
+

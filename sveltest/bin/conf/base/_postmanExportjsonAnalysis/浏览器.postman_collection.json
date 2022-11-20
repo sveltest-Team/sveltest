@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "78ef1e02-363f-48a5-a994-9dbb2e68252c",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "vip",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "queryParams",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": " csrftoken=vw8GAtgyjLUFC5TMN09IWsCfrtP6kWbbJzesLH1YmA0ANfwpm4mi26KEPke0UXR1; username=\\\"2|1:0|10:1645769022|8:username|12:MTM0NTMwMDE=|81ccdeeea49276a7799f612efa465f7b4145ab668408cdbd35463469906a0556\\\"; pwd=2|1:0|10:1645769022|3:pwd|8:MTIzNDU2|1a1270dfabb16745bfd11028cd947652ebfa8472b3318444950e9021a681c87f\",\"description\":\"\",\"type\":\"text\",\"enabled\":true}]",
+						"type": "text"
+					},
+					{
+						"key": "platform",
+						"value": "qZgBxjSmodkk/NZ6+fUwBb8FFnMrkgNPOODxw7b3+gCBIf6lsudALtF+g7No1MwuaOvjFyLhQ18PHXRbOo2oeMeNmguN0He2HUyCeFG8FrnLoxymlw3hOAPKOEMHdbfrc9Dm83IXbgznAQmKPss+QZL1C/WWXXSVFYQFWiZV02s=",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzNzA1NjI2LCJqdGkiOiJiYjZmMmJjMmVlNGM0OTNlOWJhNDA1MjRkZTg5ZGM4ZSIsInVzZXJfaWQiOiIxIn0.tn_Cg78YafBB1CRF85SoWIPEm7f4d_S_RJnULIFcJrA\n",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "db",
+							"value": "gcld2",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "lr123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://restapi.amap.com/v3/weather/weatherInfo?parameters",
+					"protocol": "https",
+					"host": [
+						"restapi",
+						"amap",
+						"com"
+					],
+					"path": [
+						"v3",
+						"weather",
+						"weatherInfo"
+					],
+					"query": [
+						{
+							"key": "pwd",
+							"value": "123456",
+							"disabled": true
+						},
+						{
+							"key": "parameters",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vip Copy",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": " csrftoken=vw8GAtgyjLUFC5TMN09IWsCfrtP6kWbbJzesLH1YmA0ANfwpm4mi26KEPke0UXR1; username=\\\"2|1:0|10:1645769022|8:username|12:MTM0NTMwMDE=|81ccdeeea49276a7799f612efa465f7b4145ab668408cdbd35463469906a0556\\\"; pwd=2|1:0|10:1645769022|3:pwd|8:MTIzNDU2|1a1270dfabb16745bfd11028cd947652ebfa8472b3318444950e9021a681c87f\",\"description\":\"\",\"type\":\"text\",\"enabled\":true}]",
+						"type": "text"
+					},
+					{
+						"key": "platform",
+						"value": "qZgBxjSmodkk/NZ6+fUwBb8FFnMrkgNPOODxw7b3+gCBIf6lsudALtF+g7No1MwuaOvjFyLhQ18PHXRbOo2oeMeNmguN0He2HUyCeFG8FrnLoxymlw3hOAPKOEMHdbfrc9Dm83IXbgznAQmKPss+QZL1C/WWXXSVFYQFWiZV02s=",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzNzA1NjI2LCJqdGkiOiJiYjZmMmJjMmVlNGM0OTNlOWJhNDA1MjRkZTg5ZGM4ZSIsInVzZXJfaWQiOiIxIn0.tn_Cg78YafBB1CRF85SoWIPEm7f4d_S_RJnULIFcJrA\n",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://restapi.amap.com/v3/weather/weatherInfo?pwd=123456&parameters",
+					"protocol": "https",
+					"host": [
+						"restapi",
+						"amap",
+						"com"
+					],
+					"path": [
+						"v3",
+						"weather",
+						"weatherInfo"
+					],
+					"query": [
+						{
+							"key": "pwd",
+							"value": "123456"
+						},
+						{
+							"key": "parameters",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vip Copy 2",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": " csrftoken=vw8GAtgyjLUFC5TMN09IWsCfrtP6kWbbJzesLH1YmA0ANfwpm4mi26KEPke0UXR1; username=\\\"2|1:0|10:1645769022|8:username|12:MTM0NTMwMDE=|81ccdeeea49276a7799f612efa465f7b4145ab668408cdbd35463469906a0556\\\"; pwd=2|1:0|10:1645769022|3:pwd|8:MTIzNDU2|1a1270dfabb16745bfd11028cd947652ebfa8472b3318444950e9021a681c87f\",\"description\":\"\",\"type\":\"text\",\"enabled\":true}]",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "platform",
+						"value": "qZgBxjSmodkk/NZ6+fUwBb8FFnMrkgNPOODxw7b3+gCBIf6lsudALtF+g7No1MwuaOvjFyLhQ18PHXRbOo2oeMeNmguN0He2HUyCeFG8FrnLoxymlw3hOAPKOEMHdbfrc9Dm83IXbgznAQmKPss+QZL1C/WWXXSVFYQFWiZV02s=",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzNzA1NjI2LCJqdGkiOiJiYjZmMmJjMmVlNGM0OTNlOWJhNDA1MjRkZTg5ZGM4ZSIsInVzZXJfaWQiOiIxIn0.tn_Cg78YafBB1CRF85SoWIPEm7f4d_S_RJnULIFcJrA\n",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://restapi.amap.com/v3/weather/weatherInfo",
+					"protocol": "https",
+					"host": [
+						"restapi",
+						"amap",
+						"com"
+					],
+					"path": [
+						"v3",
+						"weather",
+						"weatherInfo"
+					],
+					"query": [
+						{
+							"key": "pwd",
+							"value": "123456",
+							"disabled": true
+						},
+						{
+							"key": "parameters",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vip Copy 3",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restapi.amap.com/v3/weather/weatherInfo?pwd=123456",
+					"protocol": "https",
+					"host": [
+						"restapi",
+						"amap",
+						"com"
+					],
+					"path": [
+						"v3",
+						"weather",
+						"weatherInfo"
+					],
+					"query": [
+						{
+							"key": "pwd",
+							"value": "123456"
+						},
+						{
+							"key": "parameters",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vip Copy 4",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restapi.amap.com/v3/weather/weatherInfo?pwd=123456",
+					"protocol": "https",
+					"host": [
+						"restapi",
+						"amap",
+						"com"
+					],
+					"path": [
+						"v3",
+						"weather",
+						"weatherInfo"
+					],
+					"query": [
+						{
+							"key": "pwd",
+							"value": "123456"
+						},
+						{
+							"key": "parameters",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vip Copy 5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restapi.amap.com/v3/weather/weatherInfo",
+					"protocol": "https",
+					"host": [
+						"restapi",
+						"amap",
+						"com"
+					],
+					"path": [
+						"v3",
+						"weather",
+						"weatherInfo"
+					],
+					"query": [
+						{
+							"key": "parameters",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

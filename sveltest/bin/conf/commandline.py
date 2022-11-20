@@ -120,7 +120,7 @@ class MainTestSuite(object):
                     log_v2.info(f"正在为你创建测试结果打包存放目录,{settings.TEST_REPORT['ZIP']}")
                     zip_file_report_path = os.path.join(settings.TEST_REPORT['ZIP'],
                                                         '%s_%s.zip' % (self.report_filename, now)).replace("\\", "/")
-                    log_v2.info(zip_file_report_path)
+
                     os.makedirs(settings.TEST_REPORT["ZIP"], exist_ok=True)
                     log_v2.success("创建目录成功")
                     zip_path_save = ZipFile()

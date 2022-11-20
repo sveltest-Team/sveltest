@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+DEBUG = True
+
+ALLOWED_HOSTS = []
+
+
+
+# 日志路徑
+LOG_FILE_PATH = {
+    'context_processors':{
+        'default':os.path.join(BASE_DIR,'report/logs')
+    }
+
+}
+
+EXTENDERS_APP_LISTS = [
+    'HTMLTestRunner_Chart.HTMLTestRunner'
+]
+
+LOGGING_STATUS = False
+
+# Database
+# v0.1
+DATABASE = {
+    "default": {
+        "BACKEND": "",
+        "LOCATION": "redis://127.0.0.1:6379/9",
+        #"OPTIONS": {
+        #    "CLIENT_CLASS": "client.DefaultClient",
+        #}
+    }
+}
+
+# 测试用例集路径
+CASE_SUITE_PATH = os.path.join(BASE_DIR,"case").replace("\\","/")
+
+# 测试报告
+TEST_REPORT = {
+    'START_ZIP':True,
+    "TESTER":["guanfl"],
+    'ZIP':os.path.join(BASE_DIR,'report/zip').replace("\\","/"),
+    'HTML':os.path.join(BASE_DIR,'report/html').replace("\\","/"),
+    'IMG':os.path.join(BASE_DIR,'report/img').replace("\\","/"),
+}
+
+# 认证控制器相关配置
+AUTH_VALIDATORS = {
+
+}
+
+# 环境控制器配置
+ENVIRONMENT_CLASSES_CONFIG = {
+    "DEFAULT_ENVIRONMENT_NAME": "dev",
+    "HEADERS": {
+
+    },
+    "FRONTEND": {
+        "ENVIRONMENT_DEV_HOST": "http://127.0.0.1:6688/",
+        "ENVIRONMENT_SIT_HOST": "",
+        "ENVIRONMENT_UAT_HOST": "",
+
+
+    },
+    "BACKEND": {
+        "ENVIRONMENT_DEV_HOST": "https://pypi.org",
+        "ENVIRONMENT_SIT_HOST": "",
+        "ENVIRONMENT_UAT_HOST": "",
+    },
+}
+
+
+

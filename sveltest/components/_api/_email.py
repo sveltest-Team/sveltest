@@ -3,14 +3,19 @@
 
 # authors:guanfl
 # 2022/9/26
+
+import datetime
+import json
 import smtplib
+import poplib as pop
+import yagmail
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-import yagmail
 from typing import Optional,Union,Dict,List,NoReturn
+
+from flanker import mime
 
 from sveltest.support.logger_v2 import log_v2
 
@@ -207,6 +212,123 @@ class UnittestMail:
             log_v2.error("请往框架配置文件中修改邮件配置信息,error -- %s"%e)
 
 
+class DateEncoder(json.JSONEncoder):
+    """处理序列化时时间格式无法进行转json 这里重写了JSONEncoder类"""
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
 
+        elif isinstance(obj, datetime.date):
+            return obj.strftime("%Y-%m-%d")
+
+        else:
+            return json.JSONEncoder.default(self, obj)
+
+class PopEmailBase:
+    """
+    邮件处理的主逻辑类
+    """
+
+    def __init__(self,host="pop.163.com"):
+        """
+
+        """
+        self.pop_session = pop.POP3_SSL(host=host)
+        self.content_data = None
+
+    def connect(self,user=None, pwd=None):
+        """
+        进行对pop服务器连接操作
+        :param user: 邮件用户名
+        :param pwd:第三方客户端授权码
+        :return:返回pop实例
+        """
+        self.pop_session.user(user)
+        self.pop_session.pass_(pwd)
+        log_v2.info(f"user: {user}")
+
+        return self.pop_session
+
+    def get_list(self):
+        """获取邮件列表"""
+        return self.pop_session.list()
+
+    def stat(self):
+        """
+
+        """
+        return self.pop_session.stat()
+
+    def get_index(self):
+        """
+
+        """
+        result = []
+        data = self.pop_session.list()
+        for x in data[1]:
+            d = x.decode("utf-8").split(" ")
+            result.append({"id":d[0],"size":d[1]})
+        return result
+
+    def content(self,index):
+        return self.pop_session.retr(index)
+
+    def str_from(self,content):
+        """
+
+        """
+        msg_bytes_content = b'\r\n'.join(content[1])
+        self.content_data = mime.from_string(msg_bytes_content)
+        # print(data.content_type.is_singlepart()) #判断类型
+        return self.content_data
+
+    def header(self):
+        """
+
+        """
+        r = {}
+        for data in self.content_data.headers.items():
+            r[data[0]] = data[1]
+        return r
+
+    def contentEml(self,eml):
+        """
+
+        """
+        # 判断是否为单部分
+        if eml.content_type.is_singlepart():
+            eml_body = eml.body
+        else:
+            eml_body = ''
+            for part in eml.parts:
+                # 判断是否是多部分
+                if part.content_type.is_multipart():
+                    eml_body = self.contentEml(part)
+                else:
+                    if part.content_type.main == 'text':
+                        eml_body = part.body
+        return eml_body
+
+    def body(self):
+        """
+
+        """
+
+        if  self.content_data.content_type.is_singlepart():
+            return self.content_data.body
+            pass
+        else:
+            for part in  self.content_data.parts:
+                if part.content_type.is_multipart():
+                    eml_body = self.contentEml(part)
+                    return eml_body
+                if part.content_type.is_message_container():
+                    return part
+                if part.content_type.is_singlepart():
+                    if part.content_type.main == "text":
+                        return part.body
+
+    def close(self):
+        self.pop_session.quit()
 
 

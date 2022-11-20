@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+
+from sveltest import HttpTestCase
+from sveltest import main
+
+class TestWeather(HttpTestCase):
+
+    def setUp(self):
+        print("sveltest api test demo start")
+
+
+    def test_weather_search(self):
+        self.get(
+            router="/weather",data={"cityname":"深圳"}
+        )
+        print(self.url)
+        print(self.status_code)
+
+
+
+
+    def tearDown(self):
+        print("sveltest api test demo end")
+
+
+if __name__ == '__main__':
+    main(debug=True,verbosity=3)

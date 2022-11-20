@@ -3,6 +3,7 @@ import setuptools  #导入工具包
 
 # with open("requirements.txt") as fin:
 #     REQUIRED_PACKAGES = fin.read()
+from sveltest.version import version
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -10,13 +11,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="sveltest",  #项目名称
-    version="0.5.2Beta7", #项目版本
+    version=version, #项目版本
     author="guanfl", #开发者名称
     author_email="gfl13453001@163.com",  #邮箱
     description="高效率测试开发集成框架",  #描述
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/gfl13453001/fastTest", #github地址
+    url="https://github.com/sveltest-Team/sveltest", #github地址
     packages = setuptools.find_packages(),  # 包含所有src中的包
     # package_dir = {'':'sveltest'},   # 告诉distutils包都在src下
 
@@ -29,6 +30,7 @@ setuptools.setup(
         # "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ], #依赖环境
@@ -58,20 +60,20 @@ setuptools.setup(
     # text-unidecode==1.3
     # urllib3==1.25.7
 
-
     install_requires = [
         # 'Appium-Python-Client==0.49',
         'selenium',
         'testdata==1.1.3',
         'PyMySQL==0.9.3',
         'Faker==3.0.0',
+        'flanker',
         # 'fastapi==0.65.2',
         # 'uvicorn==0.14.0',
         'requests==2.26.0',
         'rich==10.12.0',
         'yagmail',
         'jinja2',
-        'gooey==1.0.8.1',
+        # 'gooey==1.0.8.1',
         'pyyaml',
         'NextTestRunner',
         'win10toast',
@@ -87,7 +89,7 @@ setuptools.setup(
         },
     keywords = 'sveltest linux python selenium unittest',
 
-    # 命令參數 tank命令会自动执行指定文件
+    # 命令參數 slt 命令会自动执行指定文件
     entry_points={
             'console_scripts': [
                 # 命令 = 包.模块.方法

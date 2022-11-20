@@ -12,7 +12,9 @@
 
 
 """
+import datetime
 import os
+from datetime import timedelta
 
 """
     测试框架的全局常量配置及配置信息
@@ -24,13 +26,22 @@ import os
 import platform
 
 
-# BASE_DIR = BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR  = Path(__file__).resolve().parent.parent
 
 
 # 框架组件注册表
 APPS_LIST = [
 
 ]
+
+# 框架控制器
+VALIDATORS = []
+
+# 认证控制器相关配置
+AUTH_VALIDATORS = {
+    # "CLASS":"sveltest.components.network.auth.UserAuth",
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=180),  # 配置过期时间
+}
 
 # 浏览器驱动配置路径
 BROWSER_DRIVER_PATH = r"D:\python3"
@@ -60,19 +71,6 @@ SCREENSHOTS_STATE = True
 # 本地测试
 DEBUG = True
 
-# #测试用例场景路径
-# TEST_CASE_FILE_PATH =  os.path.join(BASE,'data/case.xlsx').replace("\\",'/')
-#
-# # 定义日志文件的路径
-# LOG_PATH = os.path.join(BASE,'report/logs').replace('\\','/')
-#
-# #测试结果
-# TEST_CASE_RUN_REPORT = os.path.join(BASE,'report/html').replace('\\','/')
-#
-# # Test report compressed storage directory
-# # 测试报告压缩的文件存放路径
-# TEST_REPORT_COMPRESSED_STORAGE = None
-#
 
 # # Abnormal screenshot
 # # 异常截图存放路径
@@ -91,8 +89,8 @@ LOGGING_VERBOSITY = 1
 #测试结果
 # TEST_CASE_RUN_REPORT = []
 
-# 测试报告
-TEST_REPORT = []
+
+TEST_REPORT = [] # test report
 
 
 # # 识别图片集
@@ -126,6 +124,27 @@ DATABASE = {
 }
 
 
+# # 数据库配置
+# DATABASES = {
+#     'default': {
+#         # 数据库引擎（是mysql还是oracle等）
+#         'ENGINE': 'django.db.backends.mysql',
+#         # 数据库的名字
+#         'NAME': 'jnote_email',
+#         # 连接mysql数据库的用户名
+#         'USER': 'root',
+#         # 'USER': 'request',
+#         # 连接mysql数据库的密码
+#         'PASSWORD': 'jnote123.',
+#         # 'PASSWORD': 'qxy123456!@',
+#         'HOST': "192.168.16.61",
+#         # 'HOST': "43.138.173.163",
+#         # mysql数据库的端口号
+#         'PORT': '22222',
+#         'OPTIONS': {'charset': 'utf8mb4'},
+#
+#     }
+
 ###########
 #  EMAIL  #
 ###########
@@ -144,11 +163,11 @@ AUTO_SEND_EMAIL = True
 
 # 邮件发送人
 EMAIL_CONFIG = {
-    "PORT":'smtp.163.com',
+    "HOST":'smtp.163.com',
     "USERNAME":"gfl13453001@163.com",
-    "LISTS":["guanfl@jideos.com","gfl13453001@163.com"],
+    "LISTS":["localhost@host.com"],
     "CC_LIST":[],
-    "PWD":"OTYWVZMZMBGWEYHJ",
+    "PWD":"",
     "TEMPLATE":"",
     "BACKEND":"",
     # 发送邮件成功后接收到的标题前缀
@@ -205,42 +224,42 @@ DATA_DRIVER_SOURCE = {
 
 
 DEV = "dev"
-DEV_HOST = ["127.0.0.1"]
-DEV_PORT = [8000]
+DEV_HOST = "127.0.0.1"
+DEV_PORT = 8000
 
 SIT = "sit"
 SIT_ENV = []
-SIT_PORT = [8080]
+SIT_PORT = 8080
 
 UAT = "uat"
 UAT_ENV = []
-UAT_PORT = [8000]
+UAT_PORT = 8000
 
 PROD = "prod"
 PROD_ENV = []
-PROD_PORT = [80]
+PROD_PORT = 80
 
 
 # 环境控制器配置
 ENVIRONMENT_CLASSES_CONFIG = {
-    "CLASSES":"CLASS_DEV",
+    "DEFAULT_ENVIRONMENT_NAME": DEV,
+    "HEADERS": {
 
-    "DEFAULT_ENVIRONMENT_NAME":DEV,
-    "ENVIRONMENT_HOST":DEV_HOST,
-    "ENVIRONMENT_PORT":DEV_PORT,
+    },
     "FRONTEND": {
-        "CLASS_DEV":"",
-        "CLASS_SIT":"",
-        "CLASS_UAT":"",
-        "CLASS_PROD":""
+        "ENVIRONMENT_DEV_HOST": "https://pypi.org",
+        "ENVIRONMENT_SIT_HOST": "",
+        "ENVIRONMENT_UAT_HOST": "",
+
+
     },
     "BACKEND": {
-        "CLASS_DEV": "",
-        "CLASS_SIT": "",
-        "CLASS_UAT": "",
-        "CLASS_PROD": ""
+        "ENVIRONMENT_DEV_HOST": "https://pypi.org",
+        "ENVIRONMENT_SIT_HOST": "",
+        "ENVIRONMENT_UAT_HOST": "",
     },
 }
+
 # 后台
 
 # 测试用例运行匹配规则
@@ -293,3 +312,6 @@ WEBDRIVER_TEST_SETTINGS = {
 
 #  windows toast
 WINDOWS_TOAST_STATUS = True
+
+
+# https://proxy.ip3366.net/user/

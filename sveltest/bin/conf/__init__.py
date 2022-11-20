@@ -21,6 +21,8 @@ import importlib
 from sveltest.bin.conf import global_settings
 
 
+
+
 class Settings():
     # 初始化项目配置信息
     def __init__(self):
@@ -49,6 +51,4 @@ class Settings():
 
 
 settings = Settings()
-
-
 

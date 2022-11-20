@@ -8,4 +8,4 @@
 /build/
 /dist/
 /test/
-/sveltest.egg-info/
+/sveltest/tests/

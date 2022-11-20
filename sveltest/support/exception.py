@@ -53,7 +53,6 @@ class GatewayError(ServerError):
 
 ## errors which no need to restart uiautomator
 
-
 class XPathElementNotFoundError(RequestError):
     pass
 
@@ -118,6 +117,7 @@ class StaleObjectExceptionError(JSONRPCError):
 class InjectPermissionError(JSONRPCError):
     """ 开发者选项中: 模拟点击没有打开 """
 
+
 class APPError(JSONRPCError):
     """ APPS 加载异常 """
 
@@ -176,3 +176,15 @@ class FilePathError(Exception):
 
     def __str__(self):
         return self.error
+
+
+class ErrorCalls(BaseError):
+    # 错误的调用方法
+    def __init__(self, errorinfor):
+        self.error = errorinfor
+
+    def __str__(self):
+        return self.error
+
+
+#

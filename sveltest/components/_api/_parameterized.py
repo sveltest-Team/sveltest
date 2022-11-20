@@ -23,7 +23,6 @@ from functools import wraps
 # 数据驱动
 
 from sveltest.components._core import Data
-from sveltest.components.dblib.mysqldb import mysql_db
 from sveltest.components.data.core import xml_json_loader
 from sveltest.components.data.core import SvelteYaml
 
@@ -542,8 +541,6 @@ def add_test(cls, test_name, test_docstring, func, *args, **kwargs):
     """
 
     # 设置测试用例方法到当前的测试用例类中
-    # Sets the test case method into the current test case class
-
     setattr(cls, test_name, set_testcase_data(func, test_name, test_docstring,
             *args, **kwargs))
 

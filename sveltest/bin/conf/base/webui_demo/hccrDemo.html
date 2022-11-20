@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手写识别在线demo</title>
+
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        #canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*清除器样式*/
+        #controller {
+            margin: 0 auto;
+        }
+
+        .op_btn {
+            float: right;
+            margin: 20px 0 0 0;
+            border: 2px solid #aaa;
+            width: 80px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: white;
+            font-weight: bold;
+            font-family: Arial;
+        }
+
+        .op_btn:hover {
+            background: #def;
+        }
+
+        .clearfix {
+            clear: both;
+        }
+
+        /*颜色按钮*/
+        .color_btn {
+            float: left;
+            margin: 16px 0 0 10px;
+            border: 5px solid white;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .color_btn:hover {
+            border: 5px solid violet;
+        }
+
+        /*默认边框*/
+        .color_btn_selected {
+            border: 5px solid blueviolet;
+        }
+
+        #black_btn {
+            background-color: black;
+        }
+
+        #blue_btn {
+            background-color: blue;
+        }
+
+        #green_btn {
+            background-color: green;
+        }
+
+        #red_btn {
+            background-color: red;
+        }
+
+        #orange_btn {
+            background-color: orange;
+        }
+
+        #yellow_btn {
+            background-color: yellow;
+        }</style>
+</head>
+<body>
+
+<div id="app">
+
+
+    <el-row>
+        <el-col :span="10">
+            <div style=" width:500px;height:500px ">
+                <canvas id="data" width="500" height="500">
+                </canvas>
+                <div id="clear_btn" class="op_btn">清除</div>
+                <div id="send_btn" class="op_btn">识别</div>
+            </div>
+
+        </el-col>
+
+        <el-col :span="10">
+            <el-divider>
+                <span style="font-weight: bold;font-size: 18px">识别结果</span>
+            </el-divider>
+             <div style="margin-left: 200px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+<!--                 {{text}}-->
+                 <div v-for="x in text.data">
+                    {{x}}
+                 </div>
+             </div>
+        </el-col>
+    </el-row>
+
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    var app5 = new Vue({
+        el: '#app',
+        data() {
+            return {
+                canvas: {
+                    width: 0,
+                    height: 0,
+                    is_clear: 0,
+
+                },
+                base64: '',
+                text:'',
+            }
+        },
+        mounted() {
+
+            this.data()
+
+        },
+        methods: {
+
+            data() {
+                var canvasWidth = Math.min(650, $(window).width() - 20);
+                var canvasHeight = canvasWidth;
+                //默认鼠标按下为false
+                var isMouseDown = false;
+                //上一次鼠标记录的位置
+                var lastLoc = {x: 0, y: 0};
+                //设置当前默认颜色
+                var strokeColor = "black";
+                //获取画布
+                var canvas = document.getElementById('data');
+                //获取画布上下文
+                var context = canvas.getContext('2d');
+                //设置画布大小
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+
+
+                drawGrid();
+
+
+                //鼠标在画布按下时
+                canvas.onmousedown = function (e) {
+                    e.preventDefault();
+                    isMouseDown = true;
+                    //console.log("mouse Down!");
+                    //e.clientX和e.clientY传入当前屏幕坐标
+                    lastLoc = windowToCanvas(e.clientX, e.clientY);
+                    //alert(loc.x+","+loc.y);
+                };
+                //鼠标在画布按下松开后
+                canvas.onmouseup = function (e) {
+                    e.preventDefault();
+                    isMouseDown = false;
+                    //console.log("mouse Up!");
+                };
+                //鼠标离开画布时
+                canvas.onmouseout = function (e) {
+                    e.preventDefault();
+                    isMouseDown = false;
+                    //console.log("mouse out!");
+                };
+                //鼠标移动在画布上时
+                canvas.onmousemove = function (e) {
+                    e.preventDefault();
+
+                    var bbox = canvas.getBoundingClientRect();
+                    console.log(bbox)
+                    if (isMouseDown) {
+                        //console.log("mouse move!");
+                        // 获取当前画板的坐标
+                        const curLoc = windowToCanvas(e.clientX, e.clientY)
+                        // console.log(curLoc)
+
+                        //draw
+                        context.beginPath();
+                        context.moveTo(lastLoc.x, lastLoc.y);
+                        context.lineTo(curLoc.x, curLoc.y);
+                        //设置画笔颜色
+                        context.strokeStyle = strokeColor;
+                        //设置画笔粗细
+                        context.lineWidth = 1;
+                        //填补空白
+                        context.lineCap = "round";
+                        //线条更加平滑
+                        context.lineJoin = "round";
+                        //画线
+                        context.stroke();
+                        //当再画时，当前就是等于上一次开始的时候
+                        lastLoc = curLoc;
+
+                    }
+                };
+
+                $('#clear_btn').click(function () {
+                    //清除画布上的字体
+                    context.clearRect(0, 0, canvasWidth, canvasHeight);
+                    //重新绘画
+                    drawGrid();
+                });
+
+
+                if (this.canvas.is_clear === 1) {
+
+                    //重新绘画
+                    drawGrid();
+                    console.log("不满足？")
+                    this.canvas.is_clear = 0
+                }
+
+                windowToCanvas = (x, y) => {
+                    //创建canvas所对应的包围盒
+                    var bbox = canvas.getBoundingClientRect();
+                    console.log(bbox)
+                    //返回屏幕x坐标减去bbox距离左边的间距就是canvas距离左边的位置,顶部同理左边
+                    return {x: Math.round(x - bbox.left), y: Math.round(y - bbox.top)};
+                }
+
+                function drawGrid() {
+                    //保存当前画布
+                    context.save();
+                    //设置画布颜色
+                    context.strokeStyle = "rgb(171,9,230)";
+                    context.beginPath();
+                    context.moveTo(3, 3);
+                    context.lineTo(canvasWidth - 3, 3);
+                    context.lineTo(canvasWidth - 3, canvasHeight - 3);
+                    context.lineTo(3, canvasHeight - 3);
+                    context.closePath();
+
+
+                    context.lineWidth = 1;
+                    context.stroke();
+
+
+                }
+
+                var data64 = ''
+                saveDataImage = function () {
+                    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    for (var i = 0; i < imageData.data.length; i += 4) {
+                    // 当该像素是透明的,则设置成白色
+                        if (imageData.data[i + 3] == 0) {
+                            imageData.data[i] = 255;
+                            imageData.data[i + 1] = 255;
+                            imageData.data[i + 2] = 255;
+                            imageData.data[i + 3] = 255;
+                        }
+                    }
+
+                    context.putImageData(imageData, 0, 0);
+                }
+
+                $('#send_btn').click(function () {
+
+                    saveDataImage()
+                    data64 = canvas.toDataURL('image/jpeg')
+                    console.log(data64);
+
+
+                    axios.post('http://127.0.0.1:2020/license', {
+                            Data: data64
+                        }
+                        , {
+
+                            headers: {
+                                //头部信息
+                                'Content-Type': 'application/json',
+
+                                platform: "web",
+                                uservisa: "rexuegongchengluedi13453001"
+                            }
+                        }
+                    ).then(response => {
+                        Vue.set(app5, "text",response.data)
+                        const response_data = response.data
+                        this.text = response_data.data
+                        console.log(99666, this.text);
+                    }).catch(error => {
+                        console.log(error);
+                    });
+
+
+                });
+
+
+            },
+            clear_btn(e) {
+                context.clearRect(0, 0, canvasWidth, canvasHeight);
+                console.log("清除")
+            }
+
+
+        },
+
+
+    })
+</script>
+</html>

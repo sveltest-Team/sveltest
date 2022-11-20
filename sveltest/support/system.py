@@ -55,7 +55,6 @@ class StFile:
         :param target_path:
         :return:
         """
-
         if os.path.isdir(src_path) and os.path.isdir(target_path):
             filelist_src = os.listdir(src_path)
             for file in filelist_src:
@@ -95,7 +94,7 @@ class StFile:
                     src_file = os.path.join(root, file)
                     shutil.copy(src_file, target_path)
                     file_count += 1
-                    print(src_file)
+
         return int(file_count)
 
     def isdir(self,path:Optional[str]):
@@ -136,15 +135,10 @@ class StFile:
         file = []
         dir = []
         other_files = []
-        listfile = {
-            "file": file,
-            "dir": dir,
-            "other_files": other_files
-        }
         for i in file_list:
             p = os.path.splitext(i)
             if p[-1]:
-                if p[-1] == ".zip" or p[-1] == ".rar":
+                if p[-1] in [".zip",".rar" ] :
                     other_files.append(i)
                     print("{} 目录下 {} 压缩文件".format(path, i))
                 else:
@@ -153,7 +147,11 @@ class StFile:
             else:
                 dir.append(i)
                 print("{} 目录下 {} 是文件夹".format(path, i))
-        return listfile
+        return {
+                "file": file,
+                "dir": dir,
+                "other_files": other_files
+            }
 
     def del_type_file(self,path:Optional[str], filename:Optional[str]):
         """
@@ -207,9 +205,6 @@ class StFile:
             if os.path.isfile(join_file_path) == True:
                 os.remove(join_file_path)
                 print("已删除{}".format(files))
-
-
-
 
 
 class ZipFile:

@@ -45,8 +45,8 @@ CASE_SUITE_PATH = os.path.join(BASE_DIR,"case").replace("\\","/")
 # 测试报告
 TEST_REPORT = {
     'START_ZIP':True,
+    "TESTER":["guanfl"],
     'ZIP':os.path.join(BASE_DIR,'report/zip').replace("\\","/"),
     'HTML':os.path.join(BASE_DIR,'report/html').replace("\\","/"),
     'IMG':os.path.join(BASE_DIR,'report/img').replace("\\","/"),
 }
-

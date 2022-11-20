@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+from sveltest import RequestBase
+
+from sveltest.components.network.auth import BaseAuth
+
+
+class UserAuth(BaseAuth):
+
+    def authenticate(self):
+        """必须重新该 authenticate方法"""
+        ret = RequestBase()
+        response_ = ret.post(router="http://127.0.0.1:8666/api/v1/login",
+                             data={
+                              "username": "13453001",
+                              "password": "123456"
+                            },
+                             env_control=False)
+
+
+        # 直接将整个返回值返回，但不建议怎么做
+        # return response_.json
+        return {"token":response_.json["token"]}
+
+
+if __name__ == '__main__':
+    UserAuth()

@@ -337,11 +337,12 @@ class DBConnect(object):
     """
 
     def __init__(self):
-        self.host = "120.77.152.21"
+        self.host = "127.0.0.1"
         self.user = "root"
-        self.database = "upload"
+        self.database = "data"
         self.charset = "utf8"
-        self.password = "gfl13453001"
+        self.password = "gfl123456"
+        self.port = 3306
 
 
     def connect_db(self):
@@ -518,12 +519,12 @@ class BaseModel(dict,metaclass=ModelMetaClass,):
         rs_ = create_db_ddl.rstrip(",")
 
         exec_db = "create table %s (%s)"%(self.__table__,rs_)
-        try:
-            _db_info = db_connect().connect_db().execute(exec_db)
-            if _db_info == 0:
-                print("创建成功")
-        except:
-            print("已存在")
+        # try:
+        _db_info = db_connect().connect_db()
+        if _db_info == 0:
+            print("创建成功")
+        # except:
+        #     print("已存在")
 
 
 class Field(object):
@@ -656,7 +657,7 @@ class IntegerField(Field):
             NULL = arg.DB_ARGUMENT["DEFAULT_NULL"] if self.null else arg.DB_ARGUMENT["NOT_NULL"]
         return F"INT(10) {NULL}"
 
-
+# 枚举
 
 class Argument:
 
@@ -692,12 +693,12 @@ class UserModel(BaseModel):
     age = IntegerField(unique=True)
 
     class Meta:
-        table = "user"
+        table = "userdata"
 
 
 if __name__ == '__main__':
     x = UserModel(id=3,name="中",age="4")
-    x.save()
+    x.create_db()
 
     print(x)
 

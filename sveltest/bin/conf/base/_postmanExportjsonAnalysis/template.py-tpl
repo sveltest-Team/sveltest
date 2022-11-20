@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+
+from sveltest import HttpTestCase
+from sveltest import main
+
+
+class {{class_name}}(HttpTestCase):
+
+    def setUp(self):
+        {{setup_code}}
+
+
+    {{testcase_code}}
+
+
+    def tearDown(self):
+        {{tearDown}}
+
+
+if __name__ == '__main__':
+    main(debug=True)
